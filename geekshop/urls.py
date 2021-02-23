@@ -23,3 +23,4 @@ urlpatterns = [
     path('', index),
     path('products/', products),
 ]
+
