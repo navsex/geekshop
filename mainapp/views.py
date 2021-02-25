@@ -23,4 +23,3 @@ def products(request):
     }
     return render(request, 'mainapp/products.html', context)
 
-#
