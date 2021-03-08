@@ -1,3 +1,8 @@
+import os
+import json
+
+dir = os.path.dirname(__file__)
+
 from django.shortcuts import render
 from mainapp.models import ProductCategory, Product
 
@@ -10,7 +15,7 @@ def index(request):
     return render(request, 'mainapp/index.html', context)
 
 
-def products(request, id=None):
+def products(request):
     context = {
         'title': 'GeekShop - Каталог',
         'product_category': ProductCategory.objects.all(),

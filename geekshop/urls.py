@@ -19,16 +19,17 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from mainapp.views import index
+from mainapp.views import index, products
 
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name='index'),
-    path('products/', include('mainapp.urls', namespace='products')),
+    path('products/', products, name='products'),
 
-    # path('products/', products, name='products'),
+    # path('products/', include('mainapp.urls', namespace='products')),
+
     # path('login/', login, name='login'),
     # path('profile/', profile, name='profile'),
 ]
