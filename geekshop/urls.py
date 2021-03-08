@@ -26,10 +26,9 @@ from mainapp.views import index, products
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name='index'),
-    path('products/', products, name='products'),
+    path('products/', include('mainapp.urls', namespace='products')),
 
-    # path('products/', include('mainapp.urls', namespace='products')),
-
+    # path('products/', products, name='products'),
     # path('login/', login, name='login'),
     # path('profile/', profile, name='profile'),
 ]
