@@ -1,4 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponseRedirect
+from django.contrib import auth, messages
+from django.urls import reverse
+
+from authapp.forms import UserLoginForm, UserCreationForm
+
 
 def login(request):
     context = {
