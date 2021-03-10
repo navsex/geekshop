@@ -11,14 +11,16 @@ def login(request):
         if form.is_valid():
             username = request.POST['username']
             password = request.POST['password']
-            user = auth.authenticate(username = username, password = password)
+            user = auth.authenticate(username=username, password=password)
             if user and user.is_active:
                 auth.login(request, user)
-                return HttpResponseRedirect(request('index'))
+                return HttpResponseRedirect(reverse('index'))
+
     context = {
         'title': 'GeekShop - Авторизация',
-    }
+        }
     return render(request, 'authapp/login.html', context)
+
 
 def register(request):
     context = {
