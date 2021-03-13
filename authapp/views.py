@@ -44,9 +44,17 @@ def logout(request):
     auth.logout(request)
     return HttpResponseRedirect(reverse('index'))
 
-
 def profile(request):
+    if request.method == 'POST':
+        form = UserProfileForm(data=request.POST, files=request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('auth:profile'))
+    else:
+        form = UserProfileForm(instance=request.user)
     context = {
+        'form': form,
         'title': 'GeekShop - Профиль',
     }
     return render(request, 'authapp/profile.html', context)
+
