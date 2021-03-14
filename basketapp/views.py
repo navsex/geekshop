@@ -6,17 +6,22 @@ from mainapp.models import Product
 from basketapp.models import Basket
 
 
-def basket_add(requst, product_id=None):
+def basket_add(request, product_id=None):
     product = Product.objects.get(id=product_id)
-    basket = Basket.objects.filter(user=requst.user, product=product)
+    baskets = Basket.objects.filter(user=request.user, product=product)
 
-    if not basket.exists():
-        basket = Basket(user=requst.user, product=product)
+    if not baskets.exists():
+        basket = Basket(user=request.user, product=product)
         basket.quantity = 1
         basket.save()
-        return HttpResponseRedirect(requst.META.get('HTTP_REFERER'))
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     else:
-        basket = basket.first()
+        basket = baskets.first()
         basket.quantity += 1
         basket.save()
-        return HttpResponseRedirect(requst.META.get('HTTP_REFERER'))
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def basket_delete(request, id=None):
+    basket = Basket.objects.get(id=id)
+    basket.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
