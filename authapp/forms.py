@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 
 from authapp.models import User
@@ -33,6 +34,7 @@ class UserRegisterForm(UserCreationForm):
             field.widget.attrs['class'] = 'form-control py-4'
 
 class UserProfileForm(UserChangeForm):
+    avatar = forms.ImageField(widget=forms.FileInput())
     class Meta:
         model = User
         fields = ('username', 'email', 'first_name', 'last_name', 'avatar')
