@@ -3,9 +3,9 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 
-
 from mainapp.models import Product
 from basketapp.models import Basket
+
 
 @login_required
 def basket_add(request, product_id=None):
@@ -23,14 +23,16 @@ def basket_add(request, product_id=None):
         basket.save()
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+
 @login_required
 def basket_delete(request, id=None):
     basket = Basket.objects.get(id=id)
     basket.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+
 @login_required
-def basket_edit(request, id, quantity):     # недохожит до def(basket_edit)
+def basket_edit(request, id, quantity):
     if request.is_ajax():
         basket = Basket.objects.get(id=id)
         if quantity > 0:
@@ -42,4 +44,3 @@ def basket_edit(request, id, quantity):     # недохожит до def(basket
         context = {'baskets': baskets}
         result = render_to_string('basketapp/basket.html', context)
         return JsonResponse({'result': result})
-
