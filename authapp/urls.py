@@ -1,8 +1,6 @@
 from django.urls import path
 
-from authapp.views import login, register, profile, logout
-
-from authapp.views import verify
+from authapp.views import login, register, profile, logout, verify
 
 app_name = 'authapp'
 

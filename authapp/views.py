@@ -1,8 +1,9 @@
+
+
 from django.conf import settings
-from authapp.models import User
-from django.core.mail import send_mail
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib import auth
+from django.core.mail import send_mail
 from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -10,13 +11,34 @@ from django.contrib.auth.decorators import login_required
 from authapp.forms import UserLoginForm, UserRegisterForm, UserProfileForm
 from basketapp.models import Basket
 
+from .models import User
 
-def send_verify_mail(self, user):
+
+def send_verify_mail(user):
     verify_link = reverse('authapp:verify', args=[user.email, user.activation_key])
+
     title = f'Для активации учетной записи {user.username} пройдите по ссылке'
+
     messages = f'Для подтверждения учетной записи {user.username} пройдите по ссылке: \n{settings.DOMAIN_NAME}' \
                f'{verify_link}'
+
     return send_mail(title, messages, settings.EMAIL_HOST_USER, [user.email, ], fail_silently=False)
+
+
+def verify(request, email, activation_key):
+    try:
+        user = User.objects.get(email=email)
+        if user.activation_key == activation_key and not user.is_activation_key_expired():
+            user.is_active = True
+            user.save()
+            auth.login(request, user)
+            return render(request, 'authapp/verification.html')
+        else:
+            print(f'error activation user: {user}')
+            return render(request, 'authapp/verification.html')
+    except Exception as e:
+        print(f'error activation user : {e.args}')
+        return HttpResponseRedirect(reverse('index'))
 
 
 def login(request):
@@ -35,21 +57,6 @@ def login(request):
         form = UserLoginForm()
     context = {'form': form}
     return render(request, 'authapp/login.html', context)
-
-def verify(request, email, activation_key):
-    try:
-        user = User.objects.get(email=email)
-        if user.activation_key == activation_key and not user.is_activation_key_expired():
-            user.is_active = True
-            user.save()
-            auth.login(request, user)
-            return render(request, 'authapp/verification.html')
-        else:
-             print(f'error activation user: {user}')
-             return render(request, 'authapp/verification.html')
-    except Exception as e:
-        print(f'error activation user : {e.args}')
-        return HttpResponseRedirect(reverse('index'))
 
 
 def register(request):
