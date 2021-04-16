@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 
 from basketapp.views import basket_add, basket_delete, basket_edit
 

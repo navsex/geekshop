@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load static %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -9,7 +9,8 @@
     <meta name="description" content=""/>
     <meta name="author" content=""/>
     <title>{% block title %}
-            {% endblock %}
+        {% endblock %}
+
     </title>
 
     <link href="{% static 'css/auth-admin.css' %}" rel="stylesheet"/>

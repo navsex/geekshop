@@ -1,7 +1,5 @@
 {% extends 'authapp/base.html' %}
-{% block title %}
-Регистрация
-{% endblock %}
+
 {% block content %}
     <div class="col-lg-7">
         {% if form.errors %}
@@ -56,6 +54,14 @@
                                 <label class="small mb-1" for="{{ form.password2.id_for_label }}">Подтверждение
                                     пароля</label>
                                 {{ form.password2 }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="small mb-1" for="{{ form.age.id_for_label }}">Возраст</label>
+                                {{ form.age }}
                             </div>
                         </div>
                     </div>
