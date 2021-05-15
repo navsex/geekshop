@@ -12,10 +12,10 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 import json
-import environ
-
-env = environ.Env()
-environ.Env.read_env()
+# import environ
+#
+# env = environ.Env()
+# environ.Env.read_env()
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -26,8 +26,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '1h^vs@7ozr6yo$$c%rm8145=$t4pc4j&r5=w$u*zor^z=s&fka'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-# DEBUG = False
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -50,6 +49,8 @@ INSTALLED_APPS = [
 
     'debug_toolbar',
     'template_profiler_panel',
+    'django_extensions',
+
 ]
 
 MIDDLEWARE = [
@@ -97,6 +98,11 @@ WSGI_APPLICATION = 'geekshop.wsgi.application'
 #     }
 # }
 
+# выносим настройки использования движка базы данных в env
+# DATABASES = {
+#     'default': env.db('DATABASE_URL'),  # Raises ImproperlyConfigured exception if DATABASE_URL not in os.environ
+# }
+#
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -155,9 +161,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATICFILES_DIRS = (
+#     os.path.join(BASE_DIR, 'static'),
+# )
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -196,6 +203,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.user.user_details',
 )
 
+
 if DEBUG:
    def show_toolbar(request):
        return True
@@ -221,3 +229,17 @@ if DEBUG:
        'template_profiler_panel.panels.template.TemplateProfilerPanel',
    ]
 
+
+if os.name == 'posix':
+    CACHE_MIDDLEWARE_ALIAS = 'default'
+    CACHE_MIDDLEWARE_SECONDS = 120
+    CACHE_MIDDLEWARE_KEY_PREFIX = 'geekshop'
+
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+            'LOCATION': '127.0.0.1:11211',
+        }
+    }
+
+LOW_CACHE = True
